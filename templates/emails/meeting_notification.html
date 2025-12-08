@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .email-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .email-body {
+            padding: 30px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .meeting-info {
+            background-color: #f8f9fa;
+            border-left: 4px solid #1e40af;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .meeting-info h2 {
+            color: #1e40af;
+            margin-top: 0;
+            font-size: 20px;
+        }
+        .info-row {
+            margin: 12px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #6b5b47;
+            min-width: 120px;
+        }
+        .info-value {
+            color: #444;
+        }
+        .participants-list {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .participant-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .participant-item:last-child {
+            border-bottom: none;
+        }
+        .email-footer {
+            background-color: #6b5b47;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>📅 Invitation à une réunion CIM</h1>
+        </div>
+        
+        <div class="email-body">
+            <p>Bonjour,</p>
+            <p>Vous êtes invité(e) à la réunion suivante :</p>
+            
+            <div class="meeting-info">
+                <h2>{{ meeting.titre }}</h2>
+                
+                {% if meeting.description %}
+                <p style="margin: 10px 0; color: #666;">{{ meeting.description }}</p>
+                {% endif %}
+                
+                <div class="info-row">
+                    <span class="info-label">📅 Date de début:</span>
+                    <span class="info-value">{{ meeting.date_debut|date:"l d F Y à H:i" }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">⏰ Date de fin:</span>
+                    <span class="info-value">{{ meeting.date_fin|date:"l d F Y à H:i" }}</span>
+                </div>
+                
+                {% if meeting.lieu %}
+                <div class="info-row">
+                    <span class="info-label">📍 Lieu:</span>
+                    <span class="info-value">{{ meeting.lieu }}</span>
+                </div>
+                {% endif %}
+            </div>
+            
+            {% if participants %}
+            <div class="participants-list">
+                <strong>Participants ({{ participants.count }}) :</strong>
+                {% for participant in participants %}
+                <div class="participant-item">
+                    {{ participant.nom_complet }}
+                    {% if participant.organisation %}
+                        - <em>{{ participant.organisation }}</em>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <p style="margin-top: 25px;">Nous comptons sur votre présence.</p>
+            <p style="margin-bottom: 0;">Cordialement,<br><strong>L'équipe CIM</strong></p>
+        </div>
+        
+        <div class="email-footer">
+            CIM Agenda - Système de gestion des réunions<br>
+            © 2025 CIM - Tous droits réservés
+        </div>
+    </div>
+</body>
+</html>

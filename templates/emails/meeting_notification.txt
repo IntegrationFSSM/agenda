@@ -1,0 +1,32 @@
+Bonjour,
+
+Vous êtes invité(e) à la réunion suivante :
+
+========================================
+{{ meeting.titre }}
+========================================
+
+{% if meeting.description %}
+Description: {{ meeting.description }}
+{% endif %}
+
+Date de début: {{ meeting.date_debut|date:"l d F Y à H:i" }}
+Date de fin: {{ meeting.date_fin|date:"l d F Y à H:i" }}
+{% if meeting.lieu %}
+Lieu: {{ meeting.lieu }}
+{% endif %}
+
+{% if participants %}
+Participants ({{ participants.count }}):
+{% for participant in participants %}
+- {{ participant.nom_complet }}{% if participant.organisation %} ({{ participant.organisation }}){% endif %}
+{% endfor %}
+{% endif %}
+
+Nous comptons sur votre présence.
+
+Cordialement,
+L'équipe CIM
+
+---
+CIM Agenda - Système de gestion des réunions
