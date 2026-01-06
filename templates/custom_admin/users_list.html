@@ -1,0 +1,125 @@
+{% extends 'custom_admin/base_admin.html' %}
+
+{% block title %}Gestion des utilisateurs - Admin CIM{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="bi bi-people-fill"></i> Gestion des utilisateurs</h2>
+        <p class="text-muted">Gérer les utilisateurs et leurs permissions</p>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'custom_admin:user_create' %}" class="btn btn-primary">
+            <i class="bi bi-person-plus-fill"></i> Créer un utilisateur
+        </a>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" 
+                       name="search" 
+                       class="form-control" 
+                       placeholder="Rechercher..." 
+                       value="{{ search }}">
+            </div>
+            <div class="col-md-3">
+                <select name="role" class="form-select">
+                    <option value="">Tous les rôles</option>
+                    {% for value, label in role_choices %}
+                        <option value="{{ value }}" {% if role_filter == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="permission" class="form-select">
+                    <option value="">Toutes les permissions</option>
+                    <option value="yes" {% if permission_filter == 'yes' %}selected{% endif %}>Avec permission</option>
+                    <option value="no" {% if permission_filter == 'no' %}selected{% endif %}>Sans permission</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Filtrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Liste des utilisateurs -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Permission</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>
+                                <strong>{{ user.get_full_name|default:user.username }}</strong>
+                                <br>
+                                <small class="text-muted">@{{ user.username }}</small>
+                            </td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% if user.profile %}
+                                    <span class="badge bg-{{ user.profile.role|lower }}">
+                                        {{ user.profile.get_role_display }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.profile.can_make_reservation %}
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Oui
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">
+                                        <i class="bi bi-x-circle"></i> Non
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.is_active %}
+                                    <span class="badge bg-success">Actif</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactif</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'custom_admin:user_update' user.id %}" 
+                                   class="btn btn-sm btn-outline-primary" 
+                                   title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'custom_admin:user_delete' user.id %}" 
+                                   class="btn btn-sm btn-outline-danger" 
+                                   title="Supprimer">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">Aucun utilisateur trouvé</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

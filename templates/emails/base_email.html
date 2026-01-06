@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset et styles de base */
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; color: #333333; }
+        .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        
+        /* Header Premium */
+        .header { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); padding: 30px; text-align: center; color: #ffffff; }
+        .logo-text { font-size: 28px; font-weight: bold; margin: 0; letter-spacing: 1px; }
+        .header-subtitle { font-size: 14px; opacity: 0.9; margin-top: 5px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        /* Corps du message */
+        .content { padding: 40px 30px; }
+        .greeting { font-size: 20px; color: #1e40af; margin-bottom: 20px; font-weight: 600; }
+        .message-body { font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 30px; }
+        
+        /* Cartes d'information (Détails réunion) */
+        .info-card { background-color: #f8fafc; border-left: 5px solid #1e40af; padding: 20px; margin-bottom: 30px; border-radius: 4px; }
+        .info-item { margin-bottom: 10px; display: flex; align-items: flex-start; }
+        .info-item:last-child { margin-bottom: 0; }
+        .info-label { font-weight: bold; width: 80px; color: #6b5b47; flex-shrink: 0; }
+        .info-value { color: #333333; }
+        
+        /* Boutons */
+        .btn-container { text-align: center; margin: 35px 0; }
+        .btn { display: inline-block; padding: 14px 28px; background-color: #1e40af; color: #ffffff !important; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 16px; transition: background-color 0.3s; box-shadow: 0 4px 6px rgba(30, 64, 175, 0.2); }
+        .btn:hover { background-color: #1e3a8a; }
+        
+        /* Alertes (Annulation/Important) */
+        .alert-box { background-color: #fff1f2; border: 1px solid #fda4af; color: #9f1239; padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: center; font-weight: 600; }
+        
+        /* Footer */
+        .footer { background-color: #1f2937; color: #9ca3af; padding: 30px; text-align: center; font-size: 13px; }
+        .footer p { margin: 5px 0; }
+        .footer a { color: #60a5fa; text-decoration: none; }
+        
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .content { padding: 25px 15px; }
+            .header { padding: 20px; }
+            .btn { display: block; width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1 class="logo-text">Agenda CIM</h1>
+            <div class="header-subtitle">Plateforme de Gestion</div>
+        </div>
+        
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+        
+        <div class="footer">
+            <p>&copy; {% now "Y" %} Agenda CIM. Tous droits réservés.</p>
+            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+            <p>Université Cadi Ayyad - Centre d'Innovation</p>
+        </div>
+    </div>
+</body>
+</html>

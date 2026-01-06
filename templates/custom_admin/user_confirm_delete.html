@@ -1,0 +1,48 @@
+{% extends 'custom_admin/base_admin.html' %}
+
+{% block title %}Supprimer utilisateur - Admin CIM{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="bi bi-exclamation-triangle-fill text-danger"></i> Supprimer l'utilisateur</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 mx-auto">
+        <div class="card border-danger">
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <h5><i class="bi bi-exclamation-triangle-fill"></i> Attention !</h5>
+                    <p class="mb-0">Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h6>Informations de l'utilisateur :</h6>
+                    <ul class="list-unstyled">
+                        <li><strong>Nom d'utilisateur :</strong> {{ user_obj.username }}</li>
+                        <li><strong>Nom complet :</strong> {{ user_obj.get_full_name|default:"-" }}</li>
+                        <li><strong>Email :</strong> {{ user_obj.email }}</li>
+                        {% if user_obj.profile %}
+                            <li><strong>Rôle :</strong> {{ user_obj.profile.get_role_display }}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'custom_admin:users_list' %}" class="btn btn-secondary flex-fill">
+                            <i class="bi bi-arrow-left"></i> Annuler
+                        </a>
+                        <button type="submit" class="btn btn-danger flex-fill">
+                            <i class="bi bi-trash"></i> Confirmer la suppression
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'custom_admin/base_admin.html' %}
+
+{% block title %}Gestion des participants - Admin CIM{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="bi bi-person-badge"></i> Gestion des participants</h2>
+        <p class="text-muted">Tous les participants sont liés à des comptes utilisateurs</p>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-10">
+                <input type="text" 
+                       name="search" 
+                       class="form-control" 
+                       placeholder="Rechercher un participant..." 
+                       value="{{ search }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Rechercher
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Liste des participants -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Participant</th>
+                        <th>Email</th>
+                        <th>Organisation</th>
+                        <th>Compte utilisateur</th>
+                        <th>Permission réservation</th>
+                        <th>Réunions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for participant in participants %}
+                        <tr>
+                            <td>
+                                <strong>{{ participant.nom_complet }}</strong>
+                                <br>
+                                <small class="text-muted">{{ participant.telephone|default:"-" }}</small>
+                            </td>
+                            <td>{{ participant.email }}</td>
+                            <td>{{ participant.organisation|default:"-" }}</td>
+                            <td>
+                                {% if participant.user %}
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-person-check"></i> {{ participant.user.username }}
+                                    </span>
+                                    <br>
+                                    <small class="text-muted">
+                                        {% if participant.user.profile %}
+                                            {{ participant.user.profile.get_role_display }}
+                                        {% endif %}
+                                    </small>
+                                {% else %}
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-person-x"></i> Pas de compte
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if participant.user and participant.user.profile.can_make_reservation %}
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Oui
+                                    </span>
+                                {% elif participant.user %}
+                                    <span class="badge bg-secondary">
+                                        <i class="bi bi-eye"></i> Lecture seule
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">{{ participant.meetings_count }} réunion{{ participant.meetings_count|pluralize }}</span>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">Aucun participant trouvé</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info mt-4">
+    <h5><i class="bi bi-info-circle"></i> Information</h5>
+    <p class="mb-0">
+        <strong>Système de permissions :</strong><br>
+        • <strong>Administrateur</strong> : Accès complet à tout le système<br>
+        • <strong>Avec permission de réservation</strong> : Peut voir le calendrier ET créer des réunions<br>
+        • <strong>Lecture seule</strong> : Peut SEULEMENT voir le calendrier (pas de création de réunions)
+    </p>
+</div>
+{% endblock %}

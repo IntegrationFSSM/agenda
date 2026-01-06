@@ -1,23 +1,5 @@
 from django.contrib import admin
-from .models import Participant, Meeting
-
-
-@admin.register(Participant)
-class ParticipantAdmin(admin.ModelAdmin):
-    """Interface d'administration pour les participants"""
-    list_display = ['nom_complet', 'email', 'organisation', 'telephone']
-    search_fields = ['nom', 'prenom', 'email', 'organisation']
-    list_filter = ['organisation']
-    ordering = ['nom', 'prenom']
-    
-    fieldsets = (
-        ('Informations personnelles', {
-            'fields': ('prenom', 'nom', 'email', 'telephone')
-        }),
-        ('Organisation', {
-            'fields': ('organisation',)
-        }),
-    )
+from .models import Meeting
 
 
 @admin.register(Meeting)

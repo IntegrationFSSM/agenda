@@ -1,0 +1,34 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<div class="greeting">Bienvenue {{ user.first_name }} {{ user.last_name }} !</div>
+
+<div class="message-body">
+    <p>Votre compte a été créé avec succès sur la plateforme <strong>Agenda CIM</strong>.</p>
+    <p>Voici vos identifiants de connexion personnels :</p>
+</div>
+
+<div class="info-card" style="background-color: #eff6ff; border-left-color: #3b82f6;">
+    <div class="info-item">
+        <div class="info-label">Identifiant :</div>
+        <div class="info-value" style="font-weight: bold;">{{ user.email }}</div>
+    </div>
+    
+    <div class="info-item">
+        <div class="info-label">Mot de passe :</div>
+        <div class="info-value" style="font-family: monospace; background: white; padding: 2px 5px; border-radius: 3px; border: 1px solid #ddd;">{{ password }}</div>
+    </div>
+</div>
+
+<div class="alert-box" style="background-color: #fffbeb; border-color: #fcd34d; color: #92400e;">
+    🔒 IMPORTANT : Pour des raisons de sécurité, vous devrez changer ce mot de passe dès votre première connexion.
+</div>
+
+<div class="btn-container">
+    <a href="{{ login_url }}" class="btn">Activer mon compte</a>
+</div>
+
+<div class="message-body">
+    <p>Si vous avez des questions, n'hésitez pas à contacter l'administrateur.</p>
+</div>
+{% endblock %}

@@ -1,100 +1,39 @@
 from django import forms
-from django.forms import DateTimeInput
-from .models import Meeting, Participant
+from django.contrib.auth.models import User
+from .models import Meeting
 
 
 class MeetingForm(forms.ModelForm):
     """Formulaire pour créer/modifier une réunion"""
     
+    # Les participants sont maintenant des utilisateurs
+    participants = forms.ModelMultipleChoiceField(
+        queryset=User.objects.filter(is_active=True).order_by('first_name', 'last_name', 'email'),
+        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'id': 'participants-select'}),
+        required=False,
+        label="Participants",
+        help_text="Recherchez et ajoutez des participants"
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Personnaliser l'affichage des utilisateurs
+        self.fields['participants'].label_from_instance = lambda obj: f"{obj.get_full_name()} ({obj.email})" if obj.get_full_name() else obj.email
+    
     class Meta:
         model = Meeting
-        fields = ['titre', 'description', 'date_debut', 'date_fin', 'lieu', 'participants', 'couleur']
+        fields = ['titre', 'description', 'date_debut', 'date_fin', 'lieu', 'participants']
         widgets = {
-            'titre': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Titre de la réunion'
-            }),
-            'description': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 4,
-                'placeholder': 'Description de la réunion'
-            }),
-            'date_debut': DateTimeInput(attrs={
-                'class': 'form-control',
-                'type': 'datetime-local'
-            }),
-            'date_fin': DateTimeInput(attrs={
-                'class': 'form-control',
-                'type': 'datetime-local'
-            }),
-            'lieu': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Lieu de la réunion'
-            }),
-            'participants': forms.CheckboxSelectMultiple(attrs={
-                'class': 'form-check-input'
-            }),
-            'couleur': forms.TextInput(attrs={
-                'class': 'form-control',
-                'type': 'color'
-            }),
+            'titre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Titre de la réunion'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Description'}),
+            'date_debut': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'date_fin': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'lieu': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Lieu de la réunion'}),
         }
         labels = {
             'titre': 'Titre',
             'description': 'Description',
-            'date_debut': 'Date et heure de début',
-            'date_fin': 'Date et heure de fin',
+            'date_debut': 'Date de début',
+            'date_fin': 'Date de fin',
             'lieu': 'Lieu',
-            'participants': 'Participants',
-            'couleur': 'Couleur dans le calendrier',
-        }
-    
-    def clean(self):
-        cleaned_data = super().clean()
-        date_debut = cleaned_data.get('date_debut')
-        date_fin = cleaned_data.get('date_fin')
-        
-        if date_debut and date_fin:
-            if date_fin <= date_debut:
-                raise forms.ValidationError(
-                    "La date de fin doit être postérieure à la date de début."
-                )
-        
-        return cleaned_data
-
-
-class ParticipantForm(forms.ModelForm):
-    """Formulaire pour ajouter un participant"""
-    
-    class Meta:
-        model = Participant
-        fields = ['prenom', 'nom', 'email', 'telephone', 'organisation']
-        widgets = {
-            'prenom': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Prénom'
-            }),
-            'nom': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Nom'
-            }),
-            'email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'email@example.com'
-            }),
-            'telephone': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': '+33 6 12 34 56 78'
-            }),
-            'organisation': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Organisation'
-            }),
-        }
-        labels = {
-            'prenom': 'Prénom',
-            'nom': 'Nom',
-            'email': 'Email',
-            'telephone': 'Téléphone',
-            'organisation': 'Organisation',
         }

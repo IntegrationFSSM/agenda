@@ -1,0 +1,35 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<div class="greeting">Bonjour {{ user.first_name }} {{ user.last_name }},</div>
+
+<div class="alert-box">
+    ⚠️ RÉUNION ANNULÉE
+</div>
+
+<div class="message-body">
+    <p>La réunion suivante à laquelle vous deviez participer a été <strong>annulée</strong> ou <strong>supprimée</strong> de l'agenda.</p>
+</div>
+
+<div class="info-card" style="border-left-color: #ef4444;">
+    <h3 style="margin-top: 0; color: #9f1239; margin-bottom: 15px;">{{ meeting_title }}</h3>
+    
+    <div class="info-item">
+        <div class="info-label">Prévue le :</div>
+        <div class="info-value">{{ meeting_date }}</div>
+    </div>
+    
+    <div class="info-item">
+        <div class="info-label">Lieu :</div>
+        <div class="info-value">{{ meeting_location }}</div>
+    </div>
+</div>
+
+<div class="message-body">
+    <p>Veuillez nous excuser pour ce changement.</p>
+</div>
+
+<div class="btn-container">
+    <a href="{{ login_url }}" class="btn" style="background-color: #64748b;">Retour à l'agenda</a>
+</div>
+{% endblock %}

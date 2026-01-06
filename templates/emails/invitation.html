@@ -1,0 +1,43 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<div class="greeting">Bonjour {{ user.first_name }} {{ user.last_name }},</div>
+
+<div class="message-body">
+    <p>Vous avez été invité(e) à participer à la réunion suivante :</p>
+</div>
+
+<div class="info-card">
+    <h3 style="margin-top: 0; color: #1e40af; margin-bottom: 15px;">{{ meeting.titre }}</h3>
+    
+    <div class="info-item">
+        <div class="info-label">Début :</div>
+        <div class="info-value">{{ meeting.date_debut|date:"d/m/Y à H:i" }}</div>
+    </div>
+    
+    <div class="info-item">
+        <div class="info-label">Fin :</div>
+        <div class="info-value">{{ meeting.date_fin|date:"d/m/Y à H:i" }}</div>
+    </div>
+    
+    <div class="info-item">
+        <div class="info-label">Lieu :</div>
+        <div class="info-value">{{ meeting.lieu|default:"Non précisé" }}</div>
+    </div>
+    
+    {% if meeting.description %}
+    <div style="margin-top: 15px; border-top: 1px solid #e2e8f0; padding-top: 10px;">
+        <div class="info-label" style="margin-bottom: 5px;">Description :</div>
+        <div class="info-value" style="font-style: italic;">{{ meeting.description|linebreaksbr }}</div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="btn-container">
+    <a href="{{ login_url }}" class="btn">Voir sur l'agenda</a>
+</div>
+
+<div class="message-body">
+    <p>Merci de votre présence.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,167 @@
+{% extends 'custom_admin/base_admin.html' %}
+
+{% block title %}Tableau de bord - Admin CIM{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="bi bi-speedometer2"></i> Tableau de bord</h2>
+        <p class="text-muted">Vue d'ensemble de l'application</p>
+    </div>
+</div>
+
+<!-- Statistiques -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card stat-card-blue">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Utilisateurs</h6>
+                        <h2 class="mb-0">{{ total_users }}</h2>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card stat-card-green">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Réunions</h6>
+                        <h2 class="mb-0">{{ total_meetings }}</h2>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card stat-card-orange">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Participants</h6>
+                        <h2 class="mb-0">{{ total_participants }}</h2>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card stat-card-purple">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">Avec permission</h6>
+                        <h2 class="mb-0">{{ users_with_reservation }}</h2>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Réunions et Utilisateurs récents -->
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Réunions récentes</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_meetings %}
+                    <div class="list-group list-group-flush">
+                        {% for meeting in recent_meetings %}
+                            <div class="list-group-item px-0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">{{ meeting.titre }}</h6>
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar"></i> {{ meeting.date_debut|date:"d/m/Y H:i" }}
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-primary">{{ meeting.participants.count }} participants</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">Aucune réunion récente</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-people-fill"></i> Utilisateurs récents</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_users %}
+                    <div class="list-group list-group-flush">
+                        {% for user in recent_users %}
+                            <div class="list-group-item px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ user.get_full_name|default:user.username }}</h6>
+                                        <small class="text-muted">
+                                            <i class="bi bi-envelope"></i> {{ user.email }}
+                                        </small>
+                                    </div>
+                                    {% if user.profile %}
+                                        <span class="badge bg-{{ user.profile.role|lower }}">{{ user.profile.get_role_display }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">Aucun utilisateur récent</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actions rapides -->
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-lightning-fill"></i> Actions rapides</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <a href="{% url 'custom_admin:user_create' %}" class="btn btn-primary w-100">
+                            <i class="bi bi-person-plus-fill"></i> Créer un utilisateur
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/meeting/create/" class="btn btn-success w-100">
+                            <i class="bi bi-calendar-plus"></i> Créer une réunion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

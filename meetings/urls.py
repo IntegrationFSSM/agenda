@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     # Calendrier
-    path('', views.calendar_view, name='calendar'),
+    path('calendar/', views.calendar_view, name='calendar'),
     path('api/meetings/', views.meeting_list_json, name='meeting_list_json'),
     
     # Réunions
@@ -11,10 +11,4 @@ urlpatterns = [
     path('meeting/create/', views.meeting_create, name='meeting_create'),
     path('meeting/<int:pk>/update/', views.meeting_update, name='meeting_update'),
     path('meeting/<int:pk>/delete/', views.meeting_delete, name='meeting_delete'),
-    
-    # Participants
-    path('participants/', views.participant_list, name='participant_list'),
-    path('participant/create/', views.participant_create, name='participant_create'),
-    path('participant/<int:pk>/update/', views.participant_update, name='participant_update'),
-    path('participant/<int:pk>/delete/', views.participant_delete, name='participant_delete'),
 ]

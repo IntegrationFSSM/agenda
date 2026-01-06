@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mon Profil - CIM Agenda{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-user-circle"></i> Mon Profil</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Informations personnelles</h5>
+                            <p><strong>Nom d'utilisateur :</strong> {{ user.username }}</p>
+                            <p><strong>Nom complet :</strong> {{ user.get_full_name|default:"-" }}</p>
+                            <p><strong>Email :</strong> {{ user.email }}</p>
+                        </div>
+                        
+                        {% if profile %}
+                            <div class="col-md-6">
+                                <h5 class="text-muted mb-3">Profil</h5>
+                                <p><strong>Téléphone :</strong> {{ profile.phone|default:"-" }}</p>
+                                <p><strong>Organisation :</strong> {{ profile.organization|default:"-" }}</p>
+                                <p><strong>Rôle :</strong> 
+                                    <span class="badge bg-{{ profile.role|lower }}">{{ profile.get_role_display }}</span>
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if profile %}
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="text-muted mb-3">Permissions</h5>
+                                <div class="alert {% if profile.can_make_reservation %}alert-success{% else %}alert-warning{% endif %}">
+                                    <i class="fas {% if profile.can_make_reservation %}fa-check-circle{% else %}fa-exclamation-triangle{% endif %}"></i>
+                                    {% if profile.can_make_reservation %}
+                                        Vous avez la permission de créer des réservations.
+                                    {% else %}
+                                        Vous n'avez pas la permission de créer des réservations. Contactez un administrateur si nécessaire.
+                                    {% endif %}
+                                </div>
+                                
+                                {% if profile.is_admin %}
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-shield-alt"></i>
+                                        Vous êtes administrateur. Vous avez accès à l'interface d'administration.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'calendar' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Retour au calendrier
+                        </a>
+                        {% if profile.is_admin %}
+                            <a href="{% url 'custom_admin:dashboard' %}" class="btn btn-primary">
+                                <i class="fas fa-shield-alt"></i> Administration
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

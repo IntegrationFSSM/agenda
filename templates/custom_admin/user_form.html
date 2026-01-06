@@ -1,0 +1,158 @@
+{% extends 'custom_admin/base_admin.html' %}
+
+{% block title %}{{ title }} - Admin CIM{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="bi bi-person-fill"></i> {{ title }}</h2>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'custom_admin:users_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                {% if action == 'create' %}
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <h5 class="mb-3">Informations de base</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Prénom *</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <div class="text-danger small">{{ form.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Nom *</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <div class="text-danger small">{{ form.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Email (sera utilisé comme identifiant) *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <h5 class="mb-3">Mot de passe</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Mot de passe *</label>
+                                {{ form.password1 }}
+                                {% if form.password1.errors %}
+                                    <div class="text-danger small">{{ form.password1.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Confirmer le mot de passe *</label>
+                                {{ form.password2 }}
+                                {% if form.password2.errors %}
+                                    <div class="text-danger small">{{ form.password2.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <h5 class="mb-3">Informations supplémentaires</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label">Téléphone (optionnel)</label>
+                                {{ form.phone }}
+                            </div>
+                        </div>
+                        
+                        <h5 class="mb-3">Rôle et permissions</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Rôle</label>
+                                {{ form.role }}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mt-4">
+                                    {{ form.can_make_reservation }}
+                                    <label class="form-check-label" for="{{ form.can_make_reservation.id_for_label }}">
+                                        Peut créer des réservations
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Créer l'utilisateur
+                            </button>
+                        </div>
+                    </form>
+                {% else %}
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <h5 class="mb-3">Informations de base</h5>
+                        <div class="row g-3 mb-4">
+
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                {{ user_form.email }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Prénom</label>
+                                {{ user_form.first_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Nom</label>
+                                {{ user_form.last_name }}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    {{ user_form.is_active }}
+                                    <label class="form-check-label" for="{{ user_form.is_active.id_for_label }}">
+                                        Compte actif
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mb-3">Profil</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label">Téléphone</label>
+                                {{ profile_form.phone }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Rôle</label>
+                                {{ profile_form.role }}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mt-4">
+                                    {{ profile_form.can_make_reservation }}
+                                    <label class="form-check-label" for="{{ profile_form.can_make_reservation.id_for_label }}">
+                                        Peut créer des réservations
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
